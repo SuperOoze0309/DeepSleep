@@ -61,9 +61,6 @@ window.DS = window.DS || {};
     },
 
     voices: function () { return T.voices.slice(); },
-    isSpeaking: function (id) { return !!id && id === T.speakingId; },
-    isReady: function () { return T.ready; },
-
     speak: function (text, msgId) {
       var b = bridge();
       if (!b || !b.ttsSpeak) { DS.toast('当前设备不支持朗读'); return false; }

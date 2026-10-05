@@ -96,11 +96,6 @@ window.DS = window.DS || {};
         .map(function (x) { return x.r; });
     },
 
-    /** 供 UI 显示 */
-    providerName: function () {
-      return (DS.settings.searchProvider || 'duckduckgo') === 'tavily' ? 'Tavily' : 'DuckDuckGo';
-    },
-
     /**
      * 多轮检索：每条关键词搜一次，按 URL 去重，总数封顶。
      * 轮数是硬上限 —— 搜太久比搜不准更让人难受。

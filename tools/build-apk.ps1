@@ -34,8 +34,8 @@ $ZIPALIGN   = Join-Path $BT 'zipalign.exe'
 $D8_JAR     = Join-Path $BT 'lib\d8.jar'
 $APKSIGNER  = Join-Path $BT 'lib\apksigner.jar'
 
-$VERSION_CODE = '13'
-$VERSION_NAME = '1.5.0'
+$VERSION_CODE = '14'
+$VERSION_NAME = '1.5.1'
 $MIN_SDK      = '24'
 $TARGET_SDK   = '34'
 

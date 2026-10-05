@@ -83,6 +83,7 @@ node tools/audit.mjs        # static audit: dangling ids, icons, CSS classes, th
 node tools/test-dom.mjs     # 367 DOM assertions (needs the preview server on :8787)
 node tools/verify-apk.mjs   # APK structure: entry names, STORED/aligned, required assets
 node tools/check-driver.mjs # the injected preview driver must parse
+node tools/debug-console.mjs # boots 8 scenes and reports any console noise
 ```
 
 ### Architecture
@@ -255,7 +256,7 @@ tools/              构建、预览、测试、代码生成脚本
 | | |
 | --- | --- |
 | 包名 | `com.deepsleep.app` |
-| 版本 | 1.5.0（versionCode 13） |
+| 版本 | 1.5.1（versionCode 14） |
 | 签名方案 | APK Signature Scheme v2 + v3（自签名） |
 | 最低版本 | Android 7.0（API 24） |
 | 目标版本 | Android 14（API 34） |
@@ -264,4 +265,8 @@ tools/              构建、预览、测试、代码生成脚本
 
 ## License
 
-No license is granted. The source is published for reference and personal use.
+[MIT](LICENSE).
+
+Not affiliated with DeepSeek. The name and mascot are original artwork; no
+official assets are included. You are responsible for complying with the terms
+of whichever API provider you point this at.

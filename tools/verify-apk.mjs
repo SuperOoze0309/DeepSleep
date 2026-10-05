@@ -10,7 +10,7 @@ import path from 'node:path';
 import zlib from 'node:zlib';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const apkPath = process.argv[2] || path.join(ROOT, 'dist', 'DeepSleep-1.5.0.apk');
+const apkPath = process.argv[2] || path.join(ROOT, 'dist', 'DeepSleep-1.5.1.apk');
 
 const buf = fs.readFileSync(apkPath);
 const problems = [];

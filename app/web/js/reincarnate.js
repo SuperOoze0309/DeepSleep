@@ -176,7 +176,6 @@ window.DS = window.DS || {};
         });
       }
     },
-    isRunning: function () { return R.running; },
     lastSummary: function () { return R.lastSummary; },
     // 供测试直接驱动，不必真的发请求
     _transcript: transcriptOf,

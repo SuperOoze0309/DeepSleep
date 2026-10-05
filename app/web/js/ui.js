@@ -1126,7 +1126,6 @@ window.DS = window.DS || {};
           if (!plan.need || !plan.queries.length) {
             // 判定不需要联网就静默跳过，不弹任何提示 ——
             // 用户开着搜索开关，每句都告诉他「这次没搜」纯属打扰。
-            st.searchSkipped = true;
             setWorking(nodes, null);
             return null;
           }

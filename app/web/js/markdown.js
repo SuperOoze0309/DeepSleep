@@ -137,13 +137,6 @@ window.DS = window.DS || {};
       }
     },
 
-    /** 渲染进元素，并做数学公式渲染 */
-    renderInto: function (el, text, opts) {
-      opts = opts || {};
-      el.innerHTML = DS.md.render(text, opts);
-      DS.md.math(el, opts);
-    },
-
     /** KaTeX 公式渲染（对含 $ 的内容才执行，避免无谓开销） */
     math: function (el, opts) {
       if (typeof window.renderMathInElement !== 'function') return;

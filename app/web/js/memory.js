@@ -281,12 +281,6 @@ window.DS = window.DS || {};
     /** 上一次注入的规模，设置页用来显示「会占用多少上下文」 */
     lastBlockSize: function () { return lastBlock; },
 
-    /** 预估：给一个空问题，看最多会注入多少（用于设置页预览） */
-    previewSize: function () {
-      var block = this.promptBlock('', { maxItems: 15, maxChars: 2000 });
-      return block ? block.length : 0;
-    },
-
     /* 把模型抽出来的结果并进来 */
     ingest: function (data) {
       load();
