@@ -1,0 +1,9 @@
+{
+  "userData": "H:\\DSHworkspace\\Deepseek-Android\\.electron-userdata",
+  "log": "H:\\DSHworkspace\\Deepseek-Android\\tools\\shot.log",
+  "scale": 2,
+  "shots": [
+    { "url": "http://127.0.0.1:8787/?demo=home&scheme=blue&theme=light&accent=%23FFB020", "out": "H:\\DSHworkspace\\Deepseek-Android\\.shots\\50-accent-amber.png", "width": 390, "height": 844, "delay": 2400 },
+    { "url": "http://127.0.0.1:8787/?demo=home&scheme=blue&theme=light",                  "out": "H:\\DSHworkspace\\Deepseek-Android\\.shots\\51-accent-none.png",  "width": 390, "height": 844, "delay": 2400 }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "ds-shot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Headless-ish screenshot harness for the DeepSeek client UI, driven by the Electron runtime bundled with DSH Desktop.",
+  "main": "main.js"
+}

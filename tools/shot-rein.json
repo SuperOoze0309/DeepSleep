@@ -1,0 +1,12 @@
+{
+  "userData": "H:\\DSHworkspace\\Deepseek-Android\\.electron-userdata",
+  "log": "H:\\DSHworkspace\\Deepseek-Android\\tools\\shot.log",
+  "scale": 2,
+  "shots": [
+    { "url": "http://127.0.0.1:8787/?demo=reinoverlay&scheme=blue&theme=light",  "out": "H:\\DSHworkspace\\Deepseek-Android\\.shots\\70-rein-overlay.png",  "width": 390, "height": 844, "delay": 2600 },
+    { "url": "http://127.0.0.1:8787/?demo=reinoverlay&scheme=cyber&theme=dark",  "out": "H:\\DSHworkspace\\Deepseek-Android\\.shots\\71-rein-dark.png",     "width": 390, "height": 844, "delay": 2600 },
+    { "url": "http://127.0.0.1:8787/?demo=reindialog&scheme=blue&theme=light",   "out": "H:\\DSHworkspace\\Deepseek-Android\\.shots\\72-rein-dialog.png",   "width": 390, "height": 844, "delay": 2600 },
+    { "url": "http://127.0.0.1:8787/?demo=reinmemory&scheme=blue&theme=light",   "out": "H:\\DSHworkspace\\Deepseek-Android\\.shots\\73-rein-memory.png",   "width": 390, "height": 844, "delay": 2600 },
+    { "url": "http://127.0.0.1:8787/?demo=chat&scheme=blue&theme=light",         "out": "H:\\DSHworkspace\\Deepseek-Android\\.shots\\74-topbar.png",       "width": 390, "height": 844, "delay": 2600 }
+  ]
+}

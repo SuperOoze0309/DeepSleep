@@ -1,0 +1,11 @@
+{
+  "userData": "H:\\DSHworkspace\\Deepseek-Android\\.electron-userdata",
+  "log": "H:\\DSHworkspace\\Deepseek-Android\\tools\\shot.log",
+  "scale": 2,
+  "shots": [
+    { "url": "http://127.0.0.1:8787/?demo=appearance&scheme=blue&theme=light",   "out": "H:\\DSHworkspace\\Deepseek-Android\\.shots\\30-appearance-light.png", "width": 390, "height": 844, "delay": 2400 },
+    { "url": "http://127.0.0.1:8787/?demo=appearance&scheme=cyber&theme=dark",   "out": "H:\\DSHworkspace\\Deepseek-Android\\.shots\\31-appearance-dark.png",  "width": 390, "height": 844, "delay": 2400 },
+    { "url": "http://127.0.0.1:8787/?demo=chat&scheme=cyber&theme=dark",         "out": "H:\\DSHworkspace\\Deepseek-Android\\.shots\\32-cyber-dark.png",       "width": 390, "height": 844, "delay": 2600 },
+    { "url": "http://127.0.0.1:8787/?demo=chat&scheme=forest&theme=light",       "out": "H:\\DSHworkspace\\Deepseek-Android\\.shots\\33-forest-light.png",     "width": 390, "height": 844, "delay": 2600 }
+  ]
+}

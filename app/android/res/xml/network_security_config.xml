@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--
+      允许明文 HTTP：
+        · 页面与本地代理之间走 http://127.0.0.1（本地回环）
+        · 用户可能把「接口地址」配置为局域网/自建中转的 http:// 地址，
+          真正的请求由原生层发起，同样受这份策略约束。
+    -->
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

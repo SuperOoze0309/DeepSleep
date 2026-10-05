@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="format-detection" content="telephone=no">
+<title>DeepSleep</title>
+<link rel="stylesheet" href="vendor/katex.min.css">
+<link rel="stylesheet" href="vendor/highlight-github.min.css" id="hljs-light">
+<link rel="stylesheet" href="vendor/highlight-github-dark.min.css" id="hljs-dark">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ============ 遮罩 ============ -->
+  <div id="scrim" class="scrim"></div>
+
+  <!-- ============ 侧边抽屉 ============ -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="brand">
+        <img class="brand-logo" src="assets/mark-pink.png" alt="" onerror="this.style.display='none'">
+        <span class="brand-name">DeepSleep</span>
+      </div>
+    </div>
+
+    <div class="drawer-actions">
+      <button id="btn-new-chat" class="new-chat-btn">
+        <span class="nc-icon" data-icon="plus"></span>
+        <span>新对话</span>
+      </button>
+      <div class="drawer-search">
+        <span class="ds-icon" data-icon="search"></span>
+        <input id="conv-search" type="search" placeholder="搜索对话" autocomplete="off" spellcheck="false">
+      </div>
+    </div>
+
+    <div id="conv-list" class="conv-list"></div>
+
+    <div class="drawer-foot">
+      <button id="btn-settings" class="foot-row">
+        <span class="ds-icon" data-icon="settings"></span>
+        <span>设置</span>
+      </button>
+      <div class="foot-ver" id="foot-ver">DeepSleep · 第三方 API 版</div>
+    </div>
+  </aside>
+
+  <!-- ============ 主区域 ============ -->
+  <div class="main">
+    <header class="topbar" id="topbar">
+      <button id="btn-menu" class="icon-btn" aria-label="菜单"><span class="ds-icon" data-icon="menu"></span></button>
+      <button id="btn-back" class="icon-btn hidden" aria-label="返回"><span class="ds-icon" data-icon="back"></span></button>
+      <div class="topbar-title" id="topbar-title">DeepSleep</div>
+      <div class="topbar-right">
+        <button id="btn-reincarnate" class="icon-btn reincarnate-btn" aria-label="对话转生（带着记忆开新对话）">
+          <span class="ds-icon" data-icon="plus"></span>
+        </button>
+        <button id="btn-new-chat-2" class="icon-btn" aria-label="新对话"><span class="ds-icon" data-icon="newchat"></span></button>
+      </div>
+    </header>
+
+    <!-- ---------- 对话视图 ---------- -->
+    <section id="view-chat" class="view">
+      <div id="scroll-area" class="scroll-area">
+
+        <div id="hero" class="hero">
+          <!-- 加载失败只隐藏、不 display:none —— 用 display 的话一旦失败过
+               就永久消失，之后换任何形象都看不见了（这是个踩过的坑） -->
+          <img class="hero-logo" src="assets/icon-pixel.png" alt=""
+               onerror="this.style.visibility='hidden'" onload="this.style.visibility='visible'">
+
+          <h1 class="hero-title">嗨，我是 DeepSleep</h1>
+          <p class="hero-sub">我可以帮你写代码、读文件、写作各种创意内容，请把你的任务交给我吧~</p>
+          <div class="hero-chips" id="hero-chips"></div>
+        </div>
+
+        <div id="messages" class="messages"></div>
+        <div class="scroll-tail"></div>
+      </div>
+
+      <button id="btn-scroll-bottom" class="scroll-bottom hidden" aria-label="回到底部">
+        <span class="ds-icon" data-icon="down"></span>
+      </button>
+
+      <div class="composer-wrap" id="composer-wrap">
+        <div class="composer" id="composer">
+          <div id="attach-preview" class="attach-preview hidden"></div>
+          <textarea id="input" rows="1" placeholder="给 DeepSleep 发送消息"
+                    autocomplete="off" autocapitalize="sentences" spellcheck="false"></textarea>
+          <div class="composer-bar">
+            <div class="composer-left">
+              <button id="chip-think" class="chip" aria-pressed="false">
+                <span class="ds-icon" data-icon="think"></span><span>深度思考</span>
+              </button>
+              <button id="chip-search" class="chip" aria-pressed="false">
+                <span class="ds-icon" data-icon="globe"></span><span>联网搜索</span>
+              </button>
+              <button id="btn-attach" class="icon-btn small" aria-label="上传图片">
+                <span class="ds-icon" data-icon="plus"></span>
+              </button>
+            </div>
+            <div class="composer-right">
+              <button id="btn-send" class="send-btn" aria-label="发送" disabled>
+                <span class="ds-icon" data-icon="send"></span>
+                <span class="ds-icon stop" data-icon="stop"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="composer-hint" id="composer-hint">内容由 AI 生成，请仔细甄别</div>
+      </div>
+    </section>
+
+    <!-- ---------- 设置视图 ---------- -->
+    <section id="view-settings" class="view page hidden">
+      <div class="page-scroll">
+
+        <div class="group">
+          <div class="group-title">高级设置</div>
+          <div class="card">
+            <button class="row tap" id="btn-advanced">
+              <span class="row-label">系统提示词 · 温度 · 推理强度 · 联网搜索</span>
+              <span class="ds-icon chev" data-icon="right"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">服务商</div>
+          <div class="card" id="provider-list"></div>
+          <button class="add-provider" id="btn-add-provider">
+            <span class="ds-icon" data-icon="plus"></span><span>添加服务商</span>
+          </button>
+          <div class="row-hint provider-hint">每套服务商各自保存地址、Key 与模型；点一下即可切换</div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">当前服务商配置</div>
+          <div class="card">
+            <label class="row col">
+              <span class="row-label">API Key</span>
+              <span class="row-field">
+                <input id="set-key" type="password" placeholder="sk-..." autocomplete="off" spellcheck="false">
+                <button class="mini-btn" id="btn-key-eye">显示</button>
+              </span>
+            </label>
+            <label class="row col">
+              <span class="row-label">接口地址</span>
+              <span class="row-field">
+                <input id="set-base" type="url" placeholder="https://api.deepseek.com" autocomplete="off" spellcheck="false">
+              </span>
+              <span class="row-hint">填到 /v1 即可，不用带 /chat/completions 或 /messages</span>
+            </label>
+            <label class="row col">
+              <span class="row-label">模型</span>
+              <span class="row-field">
+                <select id="set-model"></select>
+                <button class="mini-btn" id="btn-load-models">拉取</button>
+              </span>
+              <span class="row-hint" id="models-hint">点「拉取」从接口读取可用模型列表</span>
+            </label>
+            <label class="row col">
+              <span class="row-label">自定义模型名</span>
+              <span class="row-field">
+                <input id="set-model-custom" type="text" placeholder="例如 deepseek-v4-pro" autocomplete="off" spellcheck="false">
+              </span>
+              <span class="row-hint">填写后将优先使用此模型名</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">开屏形象</div>
+          <div class="card">
+            <div class="icon-picker" id="icon-picker"></div>
+            <span class="row-hint" id="icon-hint">只改应用内的开屏展示，桌面图标固定不变。也可以选本地图片（最多 8 张，可删）。</span>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">外观</div>
+          <div class="card">
+            <div class="row col">
+              <span class="row-label">配色主题</span>
+              <div class="segmented scheme-seg" id="seg-scheme">
+                <button data-v="blue"><i class="swatch sw-blue"></i>官方蓝</button>
+                <button data-v="claude"><i class="swatch sw-claude"></i>克劳德橙</button>
+                <button data-v="violet"><i class="swatch sw-violet"></i>紫罗兰</button>
+                <button data-v="forest"><i class="swatch sw-forest"></i>森林绿</button>
+                <button data-v="cyber"><i class="swatch sw-cyber"></i>霓虹赛博</button>
+                <button data-v="pink"><i class="swatch sw-pink"></i>像素粉</button>
+                <button data-v="maid"><i class="swatch sw-maid"></i>女仆粉</button>
+              </div>
+              <span class="row-hint" id="scheme-hint">官方蓝：经典品牌蓝 #4D6BFE，克制的圆角卡片</span>
+            </div>
+            <div class="row col">
+              <span class="row-label">强调色<span class="row-val" id="accent-val">跟随主题</span></span>
+              <div class="accent-row" id="accent-row"></div>
+              <span class="row-hint">换一个主色，配色主题的其余部分保持不变</span>
+            </div>
+            <div class="row col">
+              <span class="row-label">明暗模式</span>
+              <div class="segmented" id="seg-theme">
+                <button data-v="system">跟随系统</button>
+                <button data-v="light">浅色</button>
+                <button data-v="dark">深色</button>
+              </div>
+            </div>
+            <div class="row">
+              <span class="row-label">纯黑模式<span class="row-val">深色下生效，OLED 省电</span></span>
+              <label class="switch"><input id="set-oled" type="checkbox"><i></i></label>
+            </div>
+            <div class="row col">
+              <span class="row-label">字体</span>
+              <div class="segmented" id="seg-typeface">
+                <button data-v="system">系统</button>
+                <button data-v="serif">衬线</button>
+                <button data-v="mono">等宽</button>
+              </div>
+            </div>
+            <div class="row col">
+              <span class="row-label">字号</span>
+              <div class="segmented" id="seg-font">
+                <button data-v="0.92">小</button>
+                <button data-v="1">标准</button>
+                <button data-v="1.1">大</button>
+                <button data-v="1.22">超大</button>
+              </div>
+            </div>
+            <div class="row col">
+              <span class="row-label">消息密度</span>
+              <div class="segmented" id="seg-density">
+                <button data-v="cozy">舒适</button>
+                <button data-v="compact">紧凑</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">长期记忆</div>
+          <div class="card">
+            <div class="row">
+              <span class="row-label">已记住<span class="row-val" id="mem-count">0 条</span></span>
+              <button class="mini-btn" id="btn-mem-extract">从当前对话提取</button>
+            </div>
+            <div class="row">
+              <span class="row-label">启用长期记忆<span class="row-val">总开关</span></span>
+              <label class="switch"><input id="set-mem-on" type="checkbox"><i></i></label>
+            </div>
+            <div class="row">
+              <span class="row-label">转生时自动提取<span class="row-val">顺带更新记忆</span></span>
+              <label class="switch"><input id="set-automem" type="checkbox"><i></i></label>
+            </div>
+            <div class="row col">
+              <span class="row-label">注入情况<span class="row-val">上限可在「高级设置」调整</span></span>
+              <span class="row-hint" id="mem-cost">还没注入过</span>
+            </div>
+            <div class="row">
+              <span class="row-label">清空记忆</span>
+              <button class="mini-btn" id="btn-mem-clear">全部删除</button>
+            </div>
+            <div class="mem-list" id="mem-list"></div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">朗读</div>
+          <div class="card">
+            <div class="row col">
+              <span class="row-label">朗读音色</span>
+              <span class="row-field">
+                <select id="set-voice"></select>
+                <button class="mini-btn" id="btn-voice-refresh">刷新</button>
+              </span>
+              <span class="row-hint" id="voice-hint">音色来自系统「文字转语音」引擎</span>
+            </div>
+            <div class="row">
+              <span class="row-label">试听当前音色</span>
+              <button class="mini-btn" id="btn-voice-preview">播放示例</button>
+            </div>
+            <label class="row col">
+              <span class="row-label">语速<span class="row-val" id="val-rate">1.0×</span></span>
+              <input id="set-rate" class="range" type="range" min="0.5" max="2" step="0.1" value="1">
+            </label>
+            <label class="row col">
+              <span class="row-label">音调<span class="row-val" id="val-pitch">1.0</span></span>
+              <input id="set-pitch" class="range" type="range" min="0.5" max="1.8" step="0.1" value="1">
+            </label>
+            <div class="row">
+              <span class="row-label">自动朗读新回复</span>
+              <label class="switch"><input id="set-autoread" type="checkbox"><i></i></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">数据</div>
+          <div class="card">
+            <button class="row tap" id="btn-export">
+              <span class="row-label">导出全部对话</span><span class="ds-icon chev" data-icon="right"></span>
+            </button>
+            <button class="row tap" id="btn-import">
+              <span class="row-label">导入对话</span><span class="ds-icon chev" data-icon="right"></span>
+            </button>
+            <button class="row tap danger" id="btn-clear-all">
+              <span class="row-label">清空全部对话</span><span class="ds-icon chev" data-icon="right"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">连接测试</div>
+          <div class="card">
+            <button class="row tap" id="btn-test">
+              <span class="row-label">测试 API 连接</span><span class="ds-icon chev" data-icon="right"></span>
+            </button>
+            <div class="test-out" id="test-out"></div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">关于</div>
+          <div class="card">
+            <div class="about">
+              <img src="assets/mark-tile.png" alt="" onerror="this.style.display='none'">
+              <div>
+                <div class="about-name">DeepSleep</div>
+                <div class="about-ver" id="about-ver">v1.0.0</div>
+                <div class="about-desc">非官方客户端 · 直连你自己的 API Key<br>界面参照主流 AI 客户端的设计</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-tail"></div>
+      </div>
+    </section>
+
+    <!-- ---------- 高级设置视图（从设置页「高级设置」进入） ---------- -->
+    <section id="view-advanced" class="view page hidden">
+      <div class="page-scroll">
+
+        <div class="group">
+          <div class="group-title">高级设置</div>
+          <div class="card">
+            <div class="row col">
+              <span class="row-hint">这里的参数会直接影响模型输出。不确定时保持默认即可，日常使用只需要上一页的 Key、地址和模型。</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">生成参数</div>
+          <div class="card">
+            <div class="row">
+              <span class="row-label">默认深度思考</span>
+              <label class="switch"><input id="set-think" type="checkbox"><i></i></label>
+            </div>
+            <label class="row col">
+              <span class="row-label">思考强度</span>
+              <span class="row-field">
+                <select id="set-effort">
+                  <option value="">跟随接口默认</option>
+                  <option value="low">low · 快速</option>
+                  <option value="high">high · 标准</option>
+                  <option value="max">max · 最强</option>
+                </select>
+              </span>
+            </label>
+            <label class="row col">
+              <span class="row-label">温度 temperature<span class="row-val" id="val-temp">1.0</span></span>
+              <input id="set-temp" class="range" type="range" min="0" max="2" step="0.1" value="1">
+            </label>
+            <label class="row col">
+              <span class="row-label">最大输出 tokens</span>
+              <span class="row-field">
+                <input id="set-maxtok" type="number" min="0" step="1024" placeholder="留空使用接口默认">
+              </span>
+            </label>
+            <label class="row col">
+              <span class="row-label">系统提示词</span>
+              <span class="row-field">
+                <textarea id="set-sysprompt" rows="3" placeholder="留空则不发送 system 消息" spellcheck="false"></textarea>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">接口格式</div>
+          <div class="card">
+            <label class="row col">
+              <span class="row-label">接口格式</span>
+              <span class="row-field">
+                <select id="set-format">
+                  <option value="openai">OpenAI 兼容（/chat/completions）</option>
+                  <option value="anthropic">Anthropic（/messages）</option>
+                </select>
+              </span>
+              <span class="row-hint">国产模型与绝大多数中转都是 OpenAI 兼容；Claude 官方选 Anthropic</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">联网搜索</div>
+          <div class="card">
+            <div class="row">
+              <span class="row-label">默认开启联网搜索</span>
+              <label class="switch"><input id="set-websearch" type="checkbox"><i></i></label>
+            </div>
+            <label class="row col">
+              <span class="row-label">搜索服务</span>
+              <span class="row-field">
+                <select id="set-search-provider">
+                  <option value="duckduckgo">DuckDuckGo（免费，无需 Key）</option>
+                  <option value="tavily">Tavily（需填 Key）</option>
+                </select>
+              </span>
+            </label>
+            <label class="row col">
+              <span class="row-label">Tavily API Key</span>
+              <span class="row-field">
+                <input id="set-tavily-key" type="password" placeholder="tvly-..." autocomplete="off" spellcheck="false">
+              </span>
+              <span class="row-hint">仅在选择 Tavily 时需要。搜索在客户端完成，结果会作为参考资料注入对话。</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">长期记忆</div>
+          <div class="card">
+            <div class="row col">
+              <span class="row-label">单次注入上限<span class="row-val" id="mem-budget-val">8 条 / 900 字</span></span>
+              <div class="segmented" id="seg-membudget">
+                <button data-v="500">省着用</button>
+                <button data-v="900">标准</button>
+                <button data-v="1500">宽松</button>
+              </div>
+              <span class="row-hint">总开关、自动提取与清空在上一页的「长期记忆」里</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-tail"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<input type="file" id="file-input" accept="image/*" multiple hidden>
+<input type="file" id="icon-input" accept="image/*" hidden>
+<input type="file" id="import-input" accept="application/json,.json" hidden>
+
+<div id="toast" class="toast"></div>
+
+<div id="sheet-wrap" class="overlay hidden">
+  <div class="sheet-bg"></div>
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<div id="dialog-wrap" class="overlay hidden">
+  <div class="dialog-bg"></div>
+  <div class="dialog" id="dialog"></div>
+</div>
+
+<div id="rein-wrap" class="overlay hidden">
+  <div class="rein-card">
+    <div class="rein-anim">
+      <img class="pixel-whale" src="assets/whale-pixel.png" alt="" onerror="this.style.display='none'">
+      <svg class="bub" viewBox="0 0 48 64" shape-rendering="crispEdges" aria-hidden="true">
+        <rect class="b b1" x="18" y="52" width="4" height="4"/>
+        <rect class="b b2" x="25" y="42" width="5" height="5"/>
+        <rect class="b b3" x="16" y="30" width="6" height="6"/>
+        <rect class="b b4" x="27" y="16" width="7" height="7"/>
+        <rect class="b b5" x="19" y="4"  width="5" height="5"/>
+      </svg>
+    </div>
+    <div class="rein-title">正在压缩记忆…</div>
+    <div class="rein-sub" id="rein-status">正在阅读对话</div>
+    <button class="rein-cancel" id="rein-cancel">取消</button>
+  </div>
+</div>
+
+<div id="lightbox" class="lightbox hidden"><img id="lightbox-img" alt=""></div>
+
+<script src="vendor/markdown-it.min.js"></script>
+<script src="vendor/highlight.min.js"></script>
+<script src="vendor/katex.min.js"></script>
+<script src="vendor/contrib/auto-render.min.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/util.js"></script>
+<script src="js/store.js"></script>
+<script src="js/memory.js"></script>
+<script src="js/markdown.js"></script>
+<script src="js/api.js"></script>
+<script src="js/search.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/reincarnate.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

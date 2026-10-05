@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 启动图标背景色：由 tools/make-icon-sets.mjs 生成，改这里没用 -->
+    <color name="ic_launcher_default_background">#FFFFFF</color>
+    <color name="ic_launcher_pink_background">#1D4ED8</color>
+    <color name="ic_launcher_orca_background">#E8EDFF</color>
+    <color name="ic_launcher_maid_background">#EAF0FF</color>
+    <color name="ic_launcher_background">#FDEBF3</color>
+    <color name="app_bg_light">#FFFFFF</color>
+    <color name="app_bg_dark">#131417</color>
+    <color name="splash_bg">#ffffff</color>
+</resources>
